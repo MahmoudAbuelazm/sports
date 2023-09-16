@@ -105,22 +105,36 @@ class _CountryScreenState extends State<CountryScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "All Country",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 60,
-              ),
-            ],
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: IconButton(
+              icon: const Icon(Icons.menu),
+              color: Colors.white,
+              onPressed: () {
+                // Define the action you want to perform when the arrow is pressed.
+              },
+            ),
           ),
+          backgroundColor: Colors.transparent,
+          title: Center(
+            child: Text(
+              "Countries",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: IconButton(
+                icon: Icon(Icons.location_on),
+                onPressed: _getCurrentPosition,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
         body: Container(
           child: SingleChildScrollView(
@@ -159,241 +173,247 @@ class _CountryScreenState extends State<CountryScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .06,
-                                width: MediaQuery.of(context).size.width * .8,
-
-                                child: Center(
-                                  child: TextField(
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w900),
-                                    decoration: InputDecoration(
-                                      filled: true, //<-- SEE HERE
-                                      fillColor: Colors.transparent,
-                                      hintText: "Current location",
-                                      hintStyle: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900),
-
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                Color.fromARGB(255, 36, 4, 240),
-                                            width: 2),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      // border: ,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color.fromARGB(255, 42, 2, 95),
-                                        ),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      // border:
-                                    ),
-                                  ),
-                                ),
-
-                                // height: MediaQuery.of(context).size.height * .07,
-                                // width: MediaQuery.of(context).size.width * .8,
-                                // child: Center(
-                                //     child: Text("Current location",
-                                //         style: TextStyle(
-                                //             color: Colors.white,
-                                //             fontWeight: FontWeight.w900))),
-                                // decoration: BoxDecoration(
-                                //   border: Border.all(
-                                //       color: Color.fromARGB(255, 42, 2, 95),
-                                //       width: 2.0),
-                                //   borderRadius: BorderRadius.circular(50),
-                                //   color: Color.fromARGB(255, 60, 60, 60),
-                                // ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.location_on),
-                                color: Colors.grey,
-                                highlightColor: Colors.transparent,
-                                onPressed: _getCurrentPosition,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 15,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  //             Navigator.push(
-                                  // context,
-                                  // MaterialPageRoute(
-                                  //     builder: (context) => const AddAddressScreen()));
-                                },
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * .07,
-                                  width: MediaQuery.of(context).size.width * .3,
-                                  child: Center(
-                                      child: Text("Open GM",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w900))),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPy9xoCiIHtNBp4PUQBsrlkMLvCqgz24sXkg&usqp=CAU",
-                                        ),
-                                        fit: BoxFit.cover),
-                                    border: Border.all(
-                                        color: Color.fromARGB(255, 42, 2, 95),
-                                        width: 2.0),
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Color.fromARGB(255, 60, 60, 60),
+                              Padding(
+                                padding: EdgeInsets.only(top: 15),
+                                child: Text(
+                                  ' ${_currentAddress ?? ""}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontFamily: 'RaceSport',
                                   ),
                                 ),
                               ),
+                              // SizedBox(
+                              //   height:
+                              //       MediaQuery.of(context).size.height * .06,
+                              //   width: MediaQuery.of(context).size.width * .9,
+
+                              //   child: Center(
+                              //     child: TextField(
+                              //       style: TextStyle(
+                              //           color: Colors.white,
+                              //           fontWeight: FontWeight.w900),
+                              //       decoration: InputDecoration(
+                              //         filled: true, //<-- SEE HERE
+                              //         fillColor: Colors.transparent,
+                              //         hintText: "Current location",
+                              //         hintStyle: TextStyle(
+                              //             color: Colors.white,
+                              //             fontWeight: FontWeight.w900),
+
+                              //         focusedBorder: OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //               color:
+                              //                   Color.fromARGB(255, 36, 4, 240),
+                              //               width: 2),
+                              //           borderRadius: BorderRadius.circular(30),
+                              //         ),
+                              //         // border: ,
+                              //         enabledBorder: OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //             color: Color.fromARGB(255, 42, 2, 95),
+                              //           ),
+                              //           borderRadius: BorderRadius.circular(30),
+                              //         ),
+                              //         // border:
+                              //       ),
+                              //     ),
+                              //   ),
+
+                              //   // height: MediaQuery.of(context).size.height * .07,
+                              //   // width: MediaQuery.of(context).size.width * .8,
+                              //   // child: Center(
+                              //   //     child: Text("Current location",
+                              //   //         style: TextStyle(
+                              //   //             color: Colors.white,
+                              //   //             fontWeight: FontWeight.w900))),
+                              //   // decoration: BoxDecoration(
+                              //   //   border: Border.all(
+                              //   //       color: Color.fromARGB(255, 42, 2, 95),
+                              //   //       width: 2.0),
+                              //   //   borderRadius: BorderRadius.circular(50),
+                              //   //   color: Color.fromARGB(255, 60, 60, 60),
+                              //   // ),
+                              // ),
                             ],
                           ),
-                          Divider(
-                            color: Colors.black,
-                            thickness: 1,
-                          ),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              child: GridView.builder(
-                                  itemCount: state.response.result.length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 3),
-                                  itemBuilder: (context, i) {
-                                    var countryId = state
-                                        .response.result[i].countryKey
-                                        .toString();
-                                    var countryName = state
-                                        .response.result[i].countryName
-                                        .toString();
-                                    var countryLogo = state
-                                        .response.result[i].countryLogo
-                                        .toString();
-                                    // var countryName = state.response.result[i].countryName.toString();
+                          // SizedBox(
+                          //   height: 15,
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     SizedBox(
+                          //       width: 15,
+                          //     ),
+                          //     // GestureDetector(
+                          //     //   onTap: () {
+                          //     //     //             Navigator.push(
+                          //     //     // context,
+                          //     //     // MaterialPageRoute(
+                          //     //     //     builder: (context) => const AddAddressScreen()));
+                          //     //   },
+                          //     //   child: Container(
+                          //     //     height:
+                          //     //         MediaQuery.of(context).size.height * .07,
+                          //     //     width: MediaQuery.of(context).size.width * .3,
+                          //     //     child: Center(
+                          //     //         child: Text("Open GM",
+                          //     //             style: TextStyle(
+                          //     //                 color: Colors.black,
+                          //     //                 fontWeight: FontWeight.w900))),
+                          //     //     decoration: BoxDecoration(
+                          //     //       image: DecorationImage(
+                          //     //           image: NetworkImage(
+                          //     //             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPy9xoCiIHtNBp4PUQBsrlkMLvCqgz24sXkg&usqp=CAU",
+                          //     //           ),
+                          //     //           fit: BoxFit.cover),
+                          //     //       border: Border.all(
+                          //     //           color: Color.fromARGB(255, 42, 2, 95),
+                          //     //           width: 2.0),
+                          //     //       borderRadius: BorderRadius.circular(50),
+                          //     //       color: Color.fromARGB(255, 60, 60, 60),
+                          //     //     ),
+                          //     //   ),
+                          //     // ),
+                          //   ],
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                child: GridView.builder(
+                                    itemCount: state.response.result.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3),
+                                    itemBuilder: (context, i) {
+                                      var countryId = state
+                                          .response.result[i].countryKey
+                                          .toString();
+                                      var countryName = state
+                                          .response.result[i].countryName
+                                          .toString();
+                                      var countryLogo = state
+                                          .response.result[i].countryLogo
+                                          .toString();
+                                      // var countryName = state.response.result[i].countryName.toString();
 
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigator.push<void>(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                            builder: (BuildContext context) =>
-                                                LeaguesScreen(
-                                              countryId: countryId,
-                                              countryName: countryName,
-                                              countryLogo: countryLogo,
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push<void>(
+                                            context,
+                                            MaterialPageRoute<void>(
+                                              builder: (BuildContext context) =>
+                                                  LeaguesScreen(
+                                                countryId: countryId,
+                                                countryName: countryName,
+                                                countryLogo: countryLogo,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                        final leages = context
-                                            .read<LeaguesCubit>()
-                                            .getAllLeagues(state
-                                                .response.result[i].countryKey
-                                                .toString());
-                                        context
-                                            .read<LeaguesCubit>()
-                                            .getAllLeagues(state
-                                                .response.result[i].countryKey
-                                                .toString());
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              1 /
-                                              15,
+                                          );
+                                          final leages = context
+                                              .read<LeaguesCubit>()
+                                              .getAllLeagues(state
+                                                  .response.result[i].countryKey
+                                                  .toString());
+                                          context
+                                              .read<LeaguesCubit>()
+                                              .getAllLeagues(state
+                                                  .response.result[i].countryKey
+                                                  .toString());
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                1 /
+                                                15,
 
-                                          width: double.infinity,
+                                            width: double.infinity,
 
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Color.fromARGB(
-                                                    255, 42, 2, 95),
-                                                width: 2.0),
-                                            // borderRadius: BorderRadius.circular(50.0)
-                                          ),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Color.fromARGB(
+                                                      255, 42, 2, 95),
+                                                  width: 2.0),
+                                              // borderRadius: BorderRadius.circular(50.0)
+                                            ),
 
-                                          //     decoration: const BoxDecoration(
-                                          // gradient: LinearGradient(
-                                          //     // begin: Alignment.center,
-                                          //     // end: Alignment.bottomRight,
-                                          //     colors: [
-                                          //   Colors.black,
-                                          //   Color(0xFF1F0048),
+                                            //     decoration: const BoxDecoration(
+                                            // gradient: LinearGradient(
+                                            //     // begin: Alignment.center,
+                                            //     // end: Alignment.bottomRight,
+                                            //     colors: [
+                                            //   Colors.black,
+                                            //   Color(0xFF1F0048),
 
-                                          // ])
+                                            // ])
 
-                                          // ),
-                                          // decoration: BoxDecoration(
-                                          //     color: Color.fromARGB(
-                                          //         255, 195, 197, 232),
-                                          //     gradient: LinearGradient(colors: [
-                                          //       Color(0x2BC8C8C8),
-                                          //       Color(0xFF2F0141),
-                                          //     ])),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  child: Image(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            .17,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            .05,
-                                                    image: NetworkImage(state
-                                                            .response
-                                                            .result[i]
-                                                            .countryLogo ??
-                                                        'https://cdn.alweb.com/thumbs/egyptencyclopedia/article/fit710x532/%D8%B9%D9%84%D9%85-%D9%85%D8%B5%D8%B1-%D8%A3%D9%87%D9%85-%D8%A7%D9%84%D8%AD%D9%82%D8%A7%D8%A6%D9%82.jpg'),
+                                            // ),
+                                            // decoration: BoxDecoration(
+                                            //     color: Color.fromARGB(
+                                            //         255, 195, 197, 232),
+                                            //     gradient: LinearGradient(colors: [
+                                            //       Color(0x2BC8C8C8),
+                                            //       Color(0xFF2F0141),
+                                            //     ])),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 10,
                                                   ),
-                                                ),
-                                                // SizedBox(
-                                                //   height: 1,
-                                                // ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-
-                                                Expanded(
-                                                  child: Text(
-                                                    state.response.result[i]
-                                                        .countryName,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
+                                                  Container(
+                                                    child: Image(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              .17,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              .05,
+                                                      image: NetworkImage(state
+                                                              .response
+                                                              .result[i]
+                                                              .countryLogo ??
+                                                          'https://cdn.alweb.com/thumbs/egyptencyclopedia/article/fit710x532/%D8%B9%D9%84%D9%85-%D9%85%D8%B5%D8%B1-%D8%A3%D9%87%D9%85-%D8%A7%D9%84%D8%AD%D9%82%D8%A7%D8%A6%D9%82.jpg'),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                  // SizedBox(
+                                                  //   height: 1,
+                                                  // ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+
+                                                  Expanded(
+                                                    child: Text(
+                                                      state.response.result[i]
+                                                          .countryName,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }))
+                                      );
+                                    })),
+                          )
                         ],
                       );
                     } else {
