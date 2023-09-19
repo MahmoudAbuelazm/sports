@@ -6,6 +6,11 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+Future<void> signOut() async {
+  await _googleSignIn.signOut();
+  print('sign out');
+}
+
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
@@ -17,6 +22,12 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController phoneNumberController = TextEditingController();
+  void dispose() {
+    phoneNumberController.dispose();
+    super.dispose();
+  }
+
   final _formKey = GlobalKey<FormState>();
   String phoneNumber = "";
   String otp = "";
@@ -55,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(phoneNumber: phoneNumber),
+            builder: (context) => HomeScreen(
+              name: phoneNumberController.text,
+            ),
           ),
         );
       } else {
@@ -82,19 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   // Check if the user is already logged in with Google
-  //   if (_auth.currentUser != null) {
-  //     Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(
-  //         builder: (context) =>
-  //             HomeScreen(phoneNumber: _auth.currentUser!.displayName!),
-  //       ),
-  //     );
-  //   }
-  // }
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -226,7 +226,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  await signInWithGoogle();
+                                  await signInWithGoogle().then((value) {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) => HomeScreen(
+                                          name: phoneNumberController.text,
+                                        ),
+                                      ),
+                                    );
+                                  });
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(8),
@@ -293,30 +301,27 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle() async {
-    // Trigger the authentication flow
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
+      print(user!.displayName);
+      print(user.email);
+      print(user.photoURL);
+      print(user.phoneNumber);
+      print(user.uid);
 
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    final UserCredential authResult =
-        await _auth.signInWithCredential(credential);
-    final User? user = authResult.user;
-    //  Once signed in, return the UserCredential
-  await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.of(context).pushNamedAndRemoveUntil("HomeScreen", (route) => false);
-     
-    
-  }
-    Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    print('sign out');
+      phoneNumberController.text = user.displayName!;
+    } catch (e) {
+      print(e);
+    }
   }
 }
