@@ -3,27 +3,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sports_app/Data/constants/constants.dart';
 import 'package:sports_app/Screen/country_screen.dart';
+import 'package:sports_app/Screen/login_screen%20.dart';
 import 'package:sports_app/main.dart';
 import 'package:lottie/lottie.dart';
 
 import '../Data/Cubit/cubit/git_country_cubit.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key, required String phoneNumber}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+    final String name;
+  HomeScreen({Key? key, required this.name}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   List<String> imageList = [
     'Images/photo_2023-09-01_12-30-36.jpg',
     'Images/photo_2023-09-02_05-19-05.jpg',
     'Images/photo_2023-09-02_12-47-30.jpg',
     'Images/photo_2023-09-02_12-47-46.jpg',
   ];
-  String user = " ";
+
+  //String user = " ";
 
   void _showCustomDialog(
       BuildContext context, String sportName, String getSportName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+          
         return AlertDialog(
           backgroundColor:
               Color.fromARGB(255, 25, 24, 26).withOpacity(0.7),
@@ -56,9 +65,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (phoneNumberController.text.isNotEmpty) {
-      user = phoneNumberController.text;
-    }
+    String user = widget.name;
     return Scaffold(
       key: _scaffoldKey, 
       extendBodyBehindAppBar: true,
@@ -98,11 +105,19 @@ class HomeScreen extends StatelessWidget {
                 leading: Icon(Icons.person),
                 title: Text(user),
               ),
+              
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text("Logout"),
                 onTap: ()
-                  {},
+                  {
+                      signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
+                  },
               
                 
               ),
